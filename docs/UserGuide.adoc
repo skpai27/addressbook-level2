@@ -91,6 +91,22 @@ Returns `John Doe` but not `john`.
 * `find Betsy Tim John` +
 Returns Any person having names `Betsy`, `Tim`, or `John`.
 
+== Finding all persons with the input number: `findNum`
+
+Finds persons whose number matches the given number. +
+Format: `find NUMBER`
+
+[NOTE]
+====
+The search is case sensitive, the order of the keywords does not matter, only the name is searched,
+and persons matching the number exactly will be output.
+====
+
+Examples:
+
+* `find 1234` +
+Returns `John Doe` if his phone number is 1234.
+
 == Deleting a person : `delete`
 
 Deletes the specified person from the address book. Irreversible. +
