@@ -6,15 +6,6 @@
   sfdfd
 
 ##########################################################
-# commands using list index before any listing created
-##########################################################
-
-  # should show appropriate message when no listing has happened yet
-  delete 1
-  view 1
-  viewall 1
-
-##########################################################
 # clean and check state
 ##########################################################
 
@@ -23,74 +14,38 @@
   list
 
 ##########################################################
-# test add person command, setup state for further tests
+# test add person command, setup state for futuer tests
 ##########################################################
 
   # should catch invalid args format
   add wrong args wrong args
-  add Valid Name 12345 e/valid@email.butNoPhonePrefix a/valid, address
-  add Valid Name p/12345 valid@email.butNoPrefix a/valid, address
-  add Valid Name p/12345 e/valid@email.butNoAddressPrefix valid, address
-  add Valid Name p/12345 e/valid@email.butNoTagPrefix a/valid, address t/goodTag noPrefixTag
+  add Valid Name p/12345 valid@email.butNoPrefix
+  add Valid Name 12345 e/valid@email.butPhonePrefixMissing
   
   # should catch invalid person data
-  add []\[;] p/12345 e/valid@e.mail a/valid, address
-  add Valid Name p/not_numbers e/valid@e.mail a/valid, address
-  add Valid Name p/12345 e/notAnEmail a/valid, address
-  add Valid Name p/12345 e/valid@e.mail a/valid, address t/invalid_-[.tag
+  add []\[;] p/12345 e/valid@e.mail
+  add Valid Name p/not_numbers e/valid@e.mail
+  add Valid Name p/12345 e/notAnEmail
 
-  # should add correctly and list non private information
-  add Adam Brown p/111111 e/adam@gmail.com a/111, alpha street
+  # should add correctly
+  add Adam Brown p/111111 e/adam@gmail.com
   list
-  add Betsy Choo pp/222222 pe/benchoo@nus.edu.sg pa/222, beta street t/secretive
-  list
-  add Charlie Dickson pp/333333 e/charlie.d@nus.edu.sg a/333, gamma street t/friends t/school
-  list
-  add Dickson Ee p/444444 pe/dickson@nus.edu.sg a/444, delta street t/friends
-  list
-  add Esther Potato p/555555 e/esther@not.a.real.potato pa/555, epsilon street t/tubers t/starchy
+  add Betsy Choo p/222222 e/benchoo@nus.edu.sg
   list
 
-  # should not allow adding duplicate persons
-  add Esther Potato p/555555 e/esther@not.a.real.potato pa/555, epsilon street t/tubers t/starchy
-
-##########################################################
-# test view/viewall persons command
-##########################################################
-
-  # should catch invalid args format
-  view
-  viewall
-  view should be only one number
-  viewall should only be one number
-
-  # should catch invalid index
-  view -1
-  view 0
-  view 6
-  viewall -1
-  viewall 0
-  viewall 6
-
-  # should show all non private for both view and viewall
-  view 1
-  viewall 1
-
-  # should show only non private details for view
-  view 3
-  view 4
-  view 5
-
-  # should show all details even private for viewall
-  viewall 3
-  viewall 4
-  viewall 5
+  # order of phone and email should not matter
+  add Charlie Dickson e/charlie.d@nus.edu.sg p/222222
+  list
+  add Dickson Ee e/dickson@nus.edu.sg p/444444
+  list
+  add Esther Potato p/555555 e/esther@notreal.potato
+  list
 
 ##########################################################
 # test find persons command
 ##########################################################
 
-  # should consider no keywords as invalid command format
+  # should match none with no keywords
   find
   # should only match full words in person names
   find bet
@@ -105,6 +60,23 @@
   find Dickson
   # find multiple with some keywords
   find Charlie Betsy
+
+##########################################################
+# test find number command
+##########################################################
+
+  # should match none with no keywords
+  findNum
+  # should only match full numbers in person numbers
+  findNum 9090
+  # does not match if none have keyword
+  findNum Betsy
+
+  # find unique number
+  findNum 111111
+  # find multiple with same number
+  findNum 222222
+
 
 ##########################################################
 # test delete person command
@@ -124,10 +96,6 @@
   # should catch attempt to delete something already deleted
   delete 2
   delete 2
-
-  # should catch attempt to view something already deleted
-  view 2
-  viewall 2
 
   # should have deleted based on last active view's index
   list
